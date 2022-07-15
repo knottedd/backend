@@ -125,7 +125,7 @@
 	<button id="btn3">GET 방식 전송</button>
 	
 	
-	<h3>2) POS 방식으로 서버에 여러 개의 데이터 전송 및 응답</h3>
+	<h3>2) POST 방식으로 서버에 여러 개의 데이터 전송 및 응답</h3>
 	
 	이름 : <input type="text" id="name" /> <br>
 	나이 : <input type="text" id="age" /> <br>
