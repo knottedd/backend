@@ -54,7 +54,7 @@
 	</p>
 	
 	<c:set var="date" value="<%= new java.util.Date() %>" />
-	<!-- type 송성 생략 가능 (기본값: date) -->
+	<!-- type 속성 생략 가능 (기본값: date) -->
 	<fmt:formatDate value="${ date }"/>
 	
 	<ul>
