@@ -17,11 +17,14 @@
 	<header>
 		<h1>Hello MVC</h1>
 		<div class="login-container">
+		    <!-- loginMember가 없으면 로그인 할 수 있는 화면 노출 -->
+			<c:if test="${ empty loginMember }">
 			<form id="loginFrm" action="${ path }/login" method="post">
 				<table>
 					<tr>
 						<td>
-							<input type="text" name="userId" id="userId" placeholder="아이디" required>
+							<input type="text" name="userId" id="userId" placeholder="아이디"
+								value="${ empty cookie.saveId ? '' : cookie.saveId.value }" required>
 						</td>
 						<td></td>
 					</tr>
@@ -35,12 +38,34 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-							<label><input type="checkbox" name="saveId">아이디 저장</label>
+							<label><input type="checkbox" name="saveId"
+										${empty cookie.saveId ? "" : "checked"}>아이디 저장</label>
 							<input type="button" value="회원가입" onclick="location.href = '${ path }/member/enroll';"> 
 						</td>
 					</tr>
 				</table>
 			</form>
+			</c:if>
+			<!-- loginMember가 있으면 이름 표시 및 내 정보와 로그아웃 버튼 생성 -->
+			<c:if test="${ not empty loginMember }">
+				<table>
+					<tr>
+						<td colspan="2">
+							${ loginMember.name }님 안녕하세요!
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button>내 정보</button>
+						</td>
+						<td>
+							<button onclick="location.replace('${ path }/logout')">로그아웃</button>
+						</td>
+					</tr>
+				</table>
+			</c:if>
+		
+			
 		</div>
 		<nav>
 			<ul class="main-nav">
