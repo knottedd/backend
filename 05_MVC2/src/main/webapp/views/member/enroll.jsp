@@ -96,4 +96,35 @@
  	</div>
 </section>
 
+<script>
+	// 아이디 중복 확인 
+	$(document).ready(() => {
+		$("#checkDuplicate").on("click", () => {
+			let userId = $("#newId").val().trim();
+			
+			$.ajax({
+				type: "POST",
+				url: "${ path }/member/idCheck",
+				dataType: "json",
+				data: {
+					userId // "userId" : userId
+				},
+				success: (obj) => {
+					console.log(obj);
+					
+					if (obj.duplicate === true) {
+						alert("이미 사용중인 아이디 입니다.")
+					} else {
+						alert("사용 가능한 아아디 입니다.")
+					}
+				},
+				error: (error) => {
+					console.log(error);
+				}
+				
+			});
+		});
+	});
+</script>
+
 <jsp:include page="/views/common/footer.jsp" /> 

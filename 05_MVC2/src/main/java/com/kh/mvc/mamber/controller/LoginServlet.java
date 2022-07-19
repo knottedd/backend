@@ -13,7 +13,7 @@ import com.kh.mvc.mamber.model.service.MemberService;
 import com.kh.mvc.mamber.model.vo.Member;
 
 
-@WebServlet("/login")
+@WebServlet(name = "login", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
