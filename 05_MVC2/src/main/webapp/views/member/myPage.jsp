@@ -36,6 +36,7 @@
 	<h2 align="center">회원 정보 수정</h2>
 	<div id="view-container">
 		<form id="memberFrm" action="${ path }/member/update" method="post">
+			<!-- input type="hidden" name="userNo" value="${ loginMember.no }"></input> -->
 			<table>
 				<tr>
 	                <th>아이디</th>
@@ -90,11 +91,30 @@
 					</td> 		
 	            </tr>
 	        </table>
-	        <button type="button">비밀번호변경</button>
+	        <button type="button" id="btnUpdatePwd">비밀번호변경</button>
 	        <input type="submit" value="정보수정">
-	        <input type="button" value="탈퇴">
+	        <input type="button" id="btnDelete" value="탈퇴">
 	 	</form>
  	</div>
 </section>
+<script>
+	$(document).ready(() => {
+		$('#btnUpdatePwd').on("click", () => {
+			let url = "${ path }/member/updatePwd";
+			let status = "left=500px,top=200px,width=400px,height=200px";
+			
+			open(url, "", status);
+		
+		});
+		
+		$('#btnDelete').on("click", () => {
+			if (confirm("정말로 탈퇴하시겠습니까?")) {
+				location.replace("${ path }/member/delete");
+			}
+			
+		});
+	});
+
+</script>
 
 <jsp:include page="/views/common/footer.jsp" /> 
