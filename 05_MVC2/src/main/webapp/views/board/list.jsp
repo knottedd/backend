@@ -21,7 +21,7 @@
 	<h2 align="center">게시판 </h2>
 	<div id="board-list-container">
 	<c:if test="${ not empty loginMember }">
-		<button type="button" id="btn-add">글쓰기</button>
+		<button type="button" onclick="location.href='${ path }/board/write'">글쓰기</button>
 	</c:if>
 	
 		<table id="tbl-board">
@@ -33,21 +33,37 @@
 				<th>첨부파일</th>
 				<th>조회수</th>
 			</tr>
+			<c:if test="${ empty list }">
 			<tr>
 				<td colspan="6">
 					조회된 게시글이 없습니다.
 				</td>
 			</tr>	
+			</c:if>
+			<c:if test="${ not empty list }">
+			<!-- list를 board 변수에 담아 반복 -->
+			<c:forEach var="board" items="${ list }">
 			<tr>
-				<td>1</td>
-				<td>제목</td>
-				<td>ismoon</td>
-				<td>2021.05.07</td>
+				<td>${ board.rowNum }</td>
 				<td>
-					<span> - </span>
+					<a href="${ path }/board/view?no=${ board.no }">
+						${ board.title }
+					</a>
 				</td>
-				<td>1</td>
+				<td>${ board.writerId }</td>
+				<td>${ board.createDate }</td>
+				<td>
+				<c:if test="${ empty board.originalFileName }">
+					<span> - </span>
+				</c:if>
+				<c:if test="${ not empty board.originalFileName }">
+					<img src="${ path }/resources/images/file.png" width="20px" height="20px">
+				</c:if>
+				</td>
+				<td>${ board.readCount }</td>
 			</tr>
+			</c:forEach>
+			</c:if>
 		</table>
 		<div id="pageBar">
 			<!-- 맨 처음으로 -->

@@ -81,6 +81,7 @@ public class BoardDao {
 				
 				board.setRowNum(rs.getInt("RNUM"));
 				board.setNo(rs.getInt("NO"));
+				board.setWriterId(rs.getString("ID"));
 				board.setTitle(rs.getString("TITLE"));
 				board.setCreateDate(rs.getDate("CREATE_DATE"));
 				board.setOriginalFileName(rs.getString("ORIGINAL_FILENAME"));
@@ -100,6 +101,129 @@ public class BoardDao {
 		
 		
 		return list;
+	}
+
+	public Board findBoardByNo(Connection connection, int no) {
+		Board board = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String query = 
+				"SELECT  B.NO, "
+					  + "B.TITLE, "
+					  + "M.ID, "
+					  + "B.READCOUNT, "
+					  + "B.ORIGINAL_FILENAME, "
+					  + "B.RENAMED_FILENAME, "
+					  + "B.CONTENT, "
+					  + "B.CREATE_DATE, "
+					  + "B.MODIFY_DATE "
+				+ "FROM BOARD B "
+				+ "JOIN MEMBER M ON(B.WRITER_NO = M.NO) "
+				+ "WHERE B.STATUS = 'Y' AND B.NO=?";
+		
+		try {
+			pstmt = connection.prepareStatement(query);
+			
+			pstmt.setInt(1, no);
+			
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				board = new Board();
+				
+				board.setNo(rs.getInt("NO"));
+				board.setTitle(rs.getString("TITLE"));
+				board.setWriterId(rs.getString("ID"));
+				board.setReadCount(rs.getInt("READCOUNT"));
+				board.setOriginalFileName(rs.getString("ORIGINAL_FILENAME"));
+				board.setRenamedFileName(rs.getString("RENAMED_FILENAME"));
+				board.setContent(rs.getString("CONTENT"));
+				board.setCreateDate(rs.getDate("CREATE_DATE"));
+				board.setModifyDate(rs.getDate("MODIFY_DATE"));
+			
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(rs);
+			close(pstmt);
+		}
+		
+		
+		return board;
+	}
+
+	public int updateStatus(Connection connection, int no, String status) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String query = "UPDATE BOARD SET STATUS=? WHERE NO=?";
+		
+		try {
+			pstmt = connection.prepareStatement(query);
+			
+			pstmt.setString(1, status);
+			pstmt.setInt(2, no);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int insertBoard(Connection connection, Board board) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String query = "INSERT INTO BOARD VALUES(SEQ_BOARD_NO.NEXTVAL,?,?,?,?,?,DEFAULT,DEFAULT,DEFAULT,DEFAULT)";
+		
+		try {
+			pstmt = connection.prepareStatement(query);
+			
+			pstmt.setInt(1, board.getWriterNo());
+			pstmt.setString(2, board.getTitle());
+			pstmt.setString(3, board.getContent());
+			pstmt.setString(4, board.getOriginalFileName());
+			pstmt.setString(5, board.getRenamedFileName());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int updateBoard(Connection connection, Board board) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String query = "UPDATE BOARD SET TITLE=?,CONTENT=?,ORIGINAL_FILENAME=?,RENAMED_FILENAME=?,MODIFY_DATE=SYSDATE WHERE NO=?";
+		
+		try {
+			pstmt = connection.prepareStatement(query);
+			
+			pstmt.setString(1, board.getTitle());
+			pstmt.setString(2, board.getContent());
+			pstmt.setString(3, board.getOriginalFileName());
+			pstmt.setString(4, board.getRenamedFileName());
+			pstmt.setInt(5, board.getNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
 
 }

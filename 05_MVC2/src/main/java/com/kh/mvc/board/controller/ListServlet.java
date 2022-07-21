@@ -42,10 +42,9 @@ public class ListServlet extends HttpServlet {
 	    // listCount 전체 리스트의 수, listLimit 한 페이지에 표시될 리스트의 수 순서
     	pageInfo = new PageInfo(page, 10, listCount, 10);
     	list = new BoardService().getBoardList(pageInfo);
-    	
-    	System.out.println(list);
-    	
+    	    	
     	request.setAttribute("pageInfo", pageInfo); 	
+    	request.setAttribute("list", list);
 		request.getRequestDispatcher("/views/board/list.jsp").forward(request, response);
 	}
 

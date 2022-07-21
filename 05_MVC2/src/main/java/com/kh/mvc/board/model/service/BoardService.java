@@ -33,4 +33,54 @@ public class BoardService {
 		return list;
 	}
 
+	public Board getBoardByNo(int no) {
+		Board board = null;
+		Connection connection = getConnection();
+		
+		board = new BoardDao().findBoardByNo(connection, no);
+		
+		close(connection);
+		
+		return board;
+	}
+
+	public int delete(int no) {
+		int result = 0;
+		Connection connection = getConnection();
+		
+		result = new BoardDao().updateStatus(connection, no, "N");
+		
+		if(result > 0) {
+			commit(connection);
+		} else {
+			rollback(connection);
+		}
+		
+		close(connection);
+		
+		return result;
+	}
+
+
+	public int save(Board board) {
+		int result = 0;
+		Connection connection = getConnection();
+		
+		if(board.getNo() != 0) {
+			result = new BoardDao().updateBoard(connection, board);
+		} else {			
+			result = new BoardDao().insertBoard(connection, board);
+		}
+		
+		if(result > 0) {
+			commit(connection);
+		} else {
+			rollback(connection);
+		}
+		
+		close(connection);
+		
+		return result;
+	}
+
 }

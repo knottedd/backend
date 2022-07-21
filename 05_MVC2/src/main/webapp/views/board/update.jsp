@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<c:set var="path" value="${ pageContext.request.contextPath }"/>
 
 <jsp:include page="/views/common/header.jsp" />
 
@@ -42,23 +44,37 @@
 <section id="content">
 	<div id='board-write-container'>
 		<h2>게시판 수정</h2>
-		<form action="" method="POST" enctype="multipart/form-data">
+		<form action="${ path }/board/update" method="POST" enctype="multipart/form-data">
+		<!-- 해당 폼에는 수정할 게시판을 식별할 프라이머리키가 없기 때문에 사용자에게 보여주지 않고
+		     hidden으로 숨겨서 value에 보내주면 된다. -->
+		<input type="hidden" name="no" value="${ board.no }">
+		<input type="hidden" name="originalFileName" value="${ board.originalFileName }">
+		<input type="hidden" name="renamedFileName" value="${ board.renamedFileName }">
 			<table id='tbl-board'>
 				<tr>
 					<th>제목</th>
-					<td><input type="text" name="title" id="title"></td>
+					<td><input type="text" name="title" id="title"
+							value="${ board.title }"></td>
 				</tr>
 				<tr>
 					<th>작성자</th>
-					<td><input type="text" name="writer" value="" readonly></td>
+					<td><input type="text" name="writer" value="${ board.writerId }" readonly></td>
 				</tr>
 				<tr>
 					<th>첨부파일</th>
-					<td><input type="file" name="upfile"></td>
+					<td>
+					<input type="file" name="upfile"> <br>
+					<c:if test="${ not empty board.originalFileName }">
+						<img src="${ path }/resources/images/file.png" width="20px" height="20px">
+						<span>${ board.originalFileName }</span>
+					</c:if>
+					</td>
 				</tr>
 				<tr>
 					<th>내용</th>
-					<td><textarea name="content" cols="50" rows="15" ></textarea></td>
+					<td>
+					<textarea name="content" cols="50" rows="15" >${ board.content }</textarea>
+					</td>
 				</tr>
 				<tr>
 					<th colspan="2">

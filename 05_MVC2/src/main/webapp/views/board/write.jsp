@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+	<c:set var="path" value="${ pageContext.request.contextPath }"/>
 <jsp:include page="/views/common/header.jsp" />
 
 <style>
@@ -42,7 +43,9 @@
 <section id="content">
 	<div id='board-write-container'>
 		<h2>게시판 작성</h2>
-		<form action="" method="" enctype="">
+		<!-- 폼을 통해 파일을 넘겨주려면 enctype 즉 인코딩타입을 넘겨주어야 한다. -->
+		<!--  cos.jar를 lib 즉 라이브러리에 추가 시켜 간편하게 사용 가능 -->
+		<form action="${ path }/board/write" method="POST" enctype="multipart/form-data">
 			<table id='tbl-board'>
 				<tr>
 					<th>제목</th>
@@ -50,7 +53,7 @@
 				</tr>
 				<tr>
 					<th>작성자</th>
-					<td><input type="text" name="writer" value="" readonly></td>
+					<td><input type="text" name="writer" value="${ loginMember.id }" readonly></td>
 				</tr>
 				<tr>
 					<th>첨부파일</th>
